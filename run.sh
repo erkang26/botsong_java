@@ -1,3 +1,3 @@
 cd output
-java MainEntry
+java MainEntry "http://kgkgkg.live" -s
 cd ..

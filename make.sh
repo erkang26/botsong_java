@@ -1,2 +1,2 @@
 mkdir -p output
-javac -d ./output/ ./*.java
+javac -Xlint:unchecked -d ./output/ ./*.java
