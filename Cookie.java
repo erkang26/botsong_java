@@ -6,6 +6,7 @@
 
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class Cookie {
 	String _name = null;
@@ -92,17 +93,89 @@ public class Cookie {
 
 		GlobalManager.getInstance().log_run( out );
 	}
+
+	int getMon( final String name ) {
+		int mon = 0;
+		if ( name.equalsIgnoreCase( "Jan" ) ) {
+			mon = 1;
+		} else if ( name.equalsIgnoreCase( "Feb" ) ) {
+			mon = 2;
+		} else if ( name.equalsIgnoreCase( "Mar" ) ) {
+			mon = 3;
+		} else if ( name.equalsIgnoreCase( "Apr" ) ) {
+			mon = 4;
+		} else if ( name.equalsIgnoreCase( "May" ) ) {
+			mon = 5;
+		} else if ( name.equalsIgnoreCase( "Jun" ) ) {
+			mon = 6;
+		} else if ( name.equalsIgnoreCase( "Jul" ) ) {
+			mon = 7;
+		} else if ( name.equalsIgnoreCase( "Aug" ) ) {
+			mon = 8;
+		} else if ( name.equalsIgnoreCase( "Sept" ) || name.equalsIgnoreCase( "Sep" ) ) {
+			mon = 9;
+		} else if ( name.equalsIgnoreCase( "Oct" ) ) {
+			mon = 10;
+		} else if ( name.equalsIgnoreCase( "Nov" ) ) {
+			mon = 11;
+		} else if ( name.equalsIgnoreCase( "Dec" ) ) {
+			mon = 12;
+		}
+
+		return mon;
+	}
+
+	String timeFormat() {
+		int pos = _expires.indexOf( ", " );
+		if ( -1 == pos ) {
+			return _expires;
+		}
+
+		String tmp = _expires.substring( pos+2 );
+
+		String[] v = tmp.split( " " );
+		pos = tmp.indexOf( "-" );
+		int day = 0;
+		int mon = 0;
+		int year = 0;
+		String time = "";
+		String suffix = "";
+		if ( -1 == pos ) {
+			day = Integer.parseInt(v[0]);
+			mon = getMon(v[1]);
+			year = Integer.parseInt(v[2]);
+			time = v[3];
+			if ( v.length > 4 ) {
+				suffix = v[4];
+			}
+		} else {
+			String[] vDate = v[0].split( "-" );
+			time = v[1];
+			if ( v.length > 2 ) {
+				suffix = v[2];
+			}
+			day = Integer.parseInt( vDate[0] );
+			mon = getMon(vDate[1]);
+			year = Integer.parseInt( vDate[2] );
+		}
+
+		String ret = String.format( "%04d-%02d-%02d %s", year, mon, day, time );
+
+		return ret;
+	}
 	
 	void transTime() {
 		try {
 			if ( getMaxAge() > 0 ) {
 				_expiresTime = new Date().getTime() + getMaxAge();
 			} else if ( !_expires.isEmpty() ) {
-				SimpleDateFormat sdf = new SimpleDateFormat( "EEE, dd MMM yyyy HH:mm:ss" );
-				Date dt = sdf.parse( _expires );
+				String time = timeFormat();
+				SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss", Locale.UK );
+				Date dt = sdf.parse( time );
 				_expiresTime = dt.getTime();
 			}
 		} catch( Exception e ) {
+			GlobalManager.getInstance().log_error( "time format unknown: " + _expires );
 			GlobalManager.getInstance().get_except().log_exception(e);
 		}
 	}

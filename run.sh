@@ -1,1 +1,1 @@
-java -jar botsong.jar "http://kgkgkg.live" -s
+java -jar botsong.jar $1 -s

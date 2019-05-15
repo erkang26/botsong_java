@@ -36,7 +36,7 @@ public class MainEntry {
 			Url url = null;
 			boolean loaded = false;
 			for ( int i=0; i<args.length; ++i ) {
-				gm.log_run( args[i] );
+				gm.log_debug( args[i] );
 				if ( args[i].equals( "-s" ) ) {
 					sameSrc = true;
 				} else if ( args[i].equals( "-d" ) ) {
@@ -51,8 +51,13 @@ public class MainEntry {
 				}
 			}
 
-			if ( !loaded && null != url ) {
-				mg.addUrl( url );
+			if ( !loaded ) {
+				if ( null != url ) {
+					mg.addUrl( url );
+				} else {
+					gm.log_run( "usage: MainEntry url [-s] [url] [url] ..." );
+					return ;
+				}
 			}
 
 			if ( sameSrc && null != url ) {
@@ -61,7 +66,7 @@ public class MainEntry {
 
 			createDir();
 
-			int threadNum = 1;
+			int threadNum = 20;
 
 			Stat.getInstance().start();
 

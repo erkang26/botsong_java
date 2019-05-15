@@ -39,6 +39,7 @@ public class HtmlCommon extends UrlDelegate {
 		}
 
 		tmp = tmp.trim();
+		tmp = tmp.replace( "/", "_" );
 
 		return tmp;
 	}
@@ -51,6 +52,7 @@ public class HtmlCommon extends UrlDelegate {
 		int m = 0;
 		n = data.indexOf( tag, m );
 		while( -1 != n && n <= data.length() ) {
+			//GlobalManager.getInstance().log_run( n + " <= " + data.length() );
 			n+= tag.length();
 			int np = 0;
 			if ( '\"' == data.charAt(n) ) {
@@ -75,10 +77,12 @@ public class HtmlCommon extends UrlDelegate {
 			if ( -1 != np ) {
 				String url = data.substring( n, np );
 				m = np+1;
-				Url u = new Url();
-				u.setUrl( domainUrl, url );
-				u.setFlag( Url.UT_COMMON );
-				UrlManager.getInstance().addUrl(u);
+				if ( !url.isEmpty() ) {
+					Url u = new Url();
+					u.setUrl( domainUrl, url );
+					u.setFlag( Url.UT_COMMON );
+					UrlManager.getInstance().addUrl(u);
+				}
 			} else {
 				m = n;
 			}

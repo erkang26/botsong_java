@@ -40,7 +40,9 @@ public class LogManager {
 				}
 			}
 		} else {
-			System.out.println( data );
+			if ( canOutput() ) {
+				System.out.println( data );
+			}
 		}
 	}
 

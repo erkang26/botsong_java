@@ -89,7 +89,7 @@ public class UrlManager {
 	}
 	public void addImg( Url url, boolean force ) {
 		if ( !force ) {
-			if ( !_mapUsedUrl.setnx( url.getUrl(), url ) ) {
+			if ( _mapUsedUrl.setnx( url.getUrl(), url ) ) {
 				return ;
 			}
 		} else {
