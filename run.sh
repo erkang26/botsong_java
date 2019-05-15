@@ -1,3 +1,1 @@
-cd output
-java MainEntry "http://kgkgkg.live" -s
-cd ..
+java -jar botsong.jar "http://kgkgkg.live" -s
